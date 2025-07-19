@@ -12,7 +12,7 @@ const cn = (...classes) => classes.filter(Boolean).join(' ');
 
 // Simplified Button component for preview
 const Button = React.forwardRef(({ asChild, variant = 'default', className, ...props }, ref) => {
-  const baseStyle = "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  const baseStyle = "inline-flex items-center justify-center rounded-md  text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ";
 
   const variants = {
     default: "bg-zinc-900 text-white hover:bg-zinc-900/90",
@@ -110,7 +110,7 @@ function Navbar() {
           <div className="flex items-center gap-4 md:gap-6">
             <div className="hidden sm:flex items-center gap-6">
               <div className="relative" ref={langMenuRef}>
-                 <Button variant="ghost" className="flex items-center gap-2 px-2 text-base" onClick={() => setLangMenuOpen(!isLangMenuOpen)}>
+                 <Button variant="ghost" className="flex items-center gap-2 px-2 text-base after:absolute after:w-[50px] after:h-[2px] after:bg-black after:bottom-[-5px] after:left-1/2 after:-translate-x-1/2 after:transition-all after:duration-300 hover:after:w-full" onClick={() => setLangMenuOpen(!isLangMenuOpen)}>
                     EN <ChevronDown className={`h-4 w-4 transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
                  </Button>
                  {isLangMenuOpen && (
@@ -141,7 +141,7 @@ function Navbar() {
             </div>
 
             <Button asChild>
-              <Link href="/login">Login</Link>
+              <Link href="/login" className="px-5 py-[6px] bg-black rounded-xl">Login</Link>
             </Button>
 
             {/* Mobile Menu Button */}
