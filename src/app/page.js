@@ -6,9 +6,9 @@ import FeaturedProduct from "@/components/featuredproduct";
 export default function Home() {
   return (
     <div className="">
-      <Hero/>
+      {/* <Hero/> */}
       <Empower/>
-      <FeaturedProduct/>
+      {/* <FeaturedProduct/> */}
     </div>
   );
 }

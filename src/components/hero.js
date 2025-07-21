@@ -17,13 +17,13 @@ export default function Hero() {
     >
       <div className="w-full flex justify-between items-flex-end px-[100px] relative">
         <div className="">
-          <h1 className="justify-start text-neutral-900 text-8xl font-normal font-Prata leading-[134.40px] max-w-[700px] mb-[21px]">
+          <h1 className="justify-start text-neutral-900 text-8xl font-normal font-Inter leading-[134.40px] max-w-[700px] mb-[21px]">
             Treat Your Skin With Natural Ingredients
           </h1>
-          <p className="self-stretch justify-start text-neutral-900 text-2xl font-normal font-'Lato' leading-9 mb-[83px]">
+          <p className="self-stretch justify-start text-neutral-900 text-2xl font-normal font-lato leading-9 mb-[83px]">
             We use premium products for a natural result.
           </p>
-          <button className="text-center relative text-neutral-900 text-xl font-normal font-'Lato' w-[83px] h-[83px] border-2 border-neutral-900 rounded-full flex items-center justify-center cursor-pointer group duration-300 mb-[100px]">
+          <button className="text-center relative text-neutral-900 text-xl font-normal font-lato w-[83px] h-[83px] border-2 border-neutral-900 rounded-full flex items-center justify-center cursor-pointer group duration-300 mb-[100px]">
             <ArrowUpRight className="text-[#F88C44] group-hover:rotate-[45deg]  duration-300" />
             <span
               //   style={{ backgroundImage: `url(${BackgrounImage.src})` }}
