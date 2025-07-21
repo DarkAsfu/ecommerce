@@ -15,6 +15,7 @@
   --font-inter: var(--font-Inter);
   --font-prata: var(--font-Prata);
   --font-lato: var(--font-Lato);
+  --font-kaiseiHarunoUmi: var(--font-KaiseiHarunoUmi);
   --animate-spin: spin 20s linear infinite;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -42,7 +43,7 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: #CFA54B;
   --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
+  --color-heading: #161616;
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   @keyframes spin {
