@@ -13,9 +13,9 @@ export default function Hero() {
   return (
     <section
       style={{ backgroundImage: `url(${BackgrounImage.src})` }}
-      className="bg-cover bg-center flex items-flex-end justify-center text-white py-[80px]"
+      className="bg-cover bg-center flex items-flex-end justify-center text-white py-[80px] overflow-x-hidden"
     >
-      <div className="w-full flex justify-between items-flex-end px-[100px]">
+      <div className="w-full flex justify-between items-flex-end px-[100px] relative">
         <div className="">
           <h1 className="justify-start text-neutral-900 text-8xl font-normal font-Prata leading-[134.40px] max-w-[700px] mb-[21px]">
             Treat Your Skin With Natural Ingredients
@@ -76,7 +76,7 @@ export default function Hero() {
           <img
             src={SideIMage.src}
             alt="Hero Image"
-            className="absolute right-[-52px] bottom-[-90px] max-w-[60%]"
+            className="absolute right-[-52px] bottom-[-80px] max-w-[60%]"
           />
           <img
             src={Sideanimation.src}

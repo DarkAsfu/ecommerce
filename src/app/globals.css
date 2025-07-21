@@ -33,3 +33,9 @@
   --font-Prata: "Prata", serif;
   --font-Quicksand: "Quicksand", sans-serif;
 }
+
+.container {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
