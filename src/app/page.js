@@ -12,7 +12,7 @@ import NewsLetter from "@/components/home/NewsLetter";
 export default function Home() {
   return (
     <div className="">
-      {/* <Hero/> */}
+      <Hero/>
       <Empower/>
       {/* <FeaturedProduct/> */}
       <FeaturedProduct/>
