@@ -27,7 +27,7 @@ const AvailableOffers = () => {
       <div className="container mx-auto px-4">
         {/* Header and Arrows */}
         <div className="flex justify-between items-center">
-          <Title title="Available Offers" />
+          <Title title="Most Availed Offers" />
           <div className="flex gap-6">
             <button
               ref={prevRef}
