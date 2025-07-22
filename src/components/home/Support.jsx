@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Support = () => {
   return (
-    <div className="bg-heading py-20">
+    <div className="bg-heading py-20 mb-[160px]">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-center items-center gap-14 md:gap-[116px]">
           <div className="flex flex-col items-center gap-[14px] md:w-[387px] text-center">

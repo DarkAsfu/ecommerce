@@ -248,19 +248,6 @@ export default function ReviewsCarousel() {
             ))}
           </div>
         </div>
-
-        {/* Mobile Indicators */}
-        {/* <div className="flex justify-center gap-2 mt-8 md:hidden">
-          {reviews.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                index === currentIndex ? "bg-gray-800 w-4" : "bg-gray-400"
-              }`}
-            />
-          ))}
-        </div> */}
       </div>
     </section>
   );
