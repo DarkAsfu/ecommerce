@@ -17,7 +17,7 @@ const SectionBanner = ({ title }) => {
                 <h1 className="text-[24px] md:text-[48px] font-prate text-heading tracking-[1.44px] ">{title}</h1>
                 <span className="text-heading font-inter text-[14px] md:text-[16px] font-semibold"><span className="md:pr-[35px]">Home</span> | <span className="md:pl-[35px]">{title}</span></span>
             </div>
-            <div className="">
+            <div className="flex justify-end">
                 <Image src={coco2} alt="coco2" />
             </div>
            </div>

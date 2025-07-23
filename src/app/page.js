@@ -8,8 +8,23 @@ import Support from "@/components/home/Support";
 import PopularVideo from "@/components/home/PopularVideo";
 import BlogPost from "@/components/home/BlogPost";
 import NewsLetter from "@/components/home/NewsLetter";
-
+import blog1 from "../../public/blog1.png";
+import blog2 from "../../public/blog2.png";
 export default function Home() {
+  const blogPost = [
+    {
+      id: 1,
+      title: "Radiant Skincare, Naturally Perfected!",
+      description: "Elevate your beauty routine with products crafted to enhance your natural glow.",
+      image: blog1,
+    },
+    {
+      id: 2,
+      title: "Pure Beauty, Perfectly Crafted!",
+      description: "Discover the essence of self-care with our luxurious beauty products.",
+      image: blog2,
+    },
+  ];
   return (
     <div className="">
       <Hero/>
@@ -20,7 +35,7 @@ export default function Home() {
       <OurReviews/>
       <Support/>
       <PopularVideo/>
-      <BlogPost/> 
+      <BlogPost blogPost={blogPost}/> 
       <NewsLetter/>
     </div>
   );
