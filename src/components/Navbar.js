@@ -1,11 +1,26 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Search, Heart, ShoppingCart, Menu, X, ChevronDown, Globe } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Search,
+  Heart,
+  ShoppingCart,
+  Menu,
+  X,
+  ChevronDown,
+  Globe,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ReusableModal } from "./reusable/ReusableModal";
+import Login from "./login/Login";
 
 // Navigation links data
 const navLinks = [
@@ -16,52 +31,52 @@ const navLinks = [
   { href: "/offers", label: "Offers" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
-]
+];
 
 const languages = [
   { code: "EN", label: "English", flag: "🇺🇸" },
   { code: "ES", label: "Español", flag: "🇪🇸" },
   { code: "FR", label: "Français", flag: "🇫🇷" },
-]
+];
 
 // Primary color
-const PRIMARY_COLOR = "#CFA54B"
-const PRIMARY_LIGHT = "#222222"
-const PRIMARY_DARK = "#B8944A"
+const PRIMARY_COLOR = "#CFA54B";
+const PRIMARY_LIGHT = "#222222";
+const PRIMARY_DARK = "#B8944A";
 
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [selectedLanguage, setSelectedLanguage] = useState("EN")
-  const pathname = usePathname() // Get current pathname
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("EN");
+  const pathname = usePathname(); // Get current pathname
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset"
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [isMobileMenuOpen])
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
 
   const handleLanguageChange = (langCode) => {
-    setSelectedLanguage(langCode)
-  }
+    setSelectedLanguage(langCode);
+  };
 
   const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false)
-  }
+    setIsMobileMenuOpen(false);
+  };
 
   // Check if link is active
   const isActiveLink = (href) => {
     if (href === "/") {
-      return pathname === "/"
+      return pathname === "/";
     }
-    return pathname.startsWith(href)
-  }
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
@@ -73,7 +88,9 @@ export default function Navbar() {
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold hover:opacity-80 transition-all relative z-[60]"
             style={{
               color: isMobileMenuOpen ? "white" : PRIMARY_COLOR,
-              textShadow: isMobileMenuOpen ? "0 2px 4px rgba(0,0,0,0.3)" : "none",
+              textShadow: isMobileMenuOpen
+                ? "0 2px 4px rgba(0,0,0,0.3)"
+                : "none",
             }}
           >
             Lorem
@@ -83,7 +100,7 @@ export default function Navbar() {
           <nav className="hidden xl:flex items-center">
             <ul className="flex items-center gap-6 lg:gap-8">
               {navLinks.map((link) => {
-                const isActive = isActiveLink(link.href)
+                const isActive = isActiveLink(link.href);
                 return (
                   <li key={link.href}>
                     <Link
@@ -101,7 +118,7 @@ export default function Navbar() {
                       />
                     </Link>
                   </li>
-                )
+                );
               })}
             </ul>
           </nav>
@@ -112,7 +129,10 @@ export default function Navbar() {
             <div className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-2 px-3 py-2 hover:opacity-80">
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 px-3 py-2 hover:opacity-80"
+                  >
                     <Globe className="h-4 w-4" />
                     {selectedLanguage}
                     <ChevronDown className="h-4 w-4" />
@@ -125,7 +145,10 @@ export default function Navbar() {
                       onClick={() => handleLanguageChange(lang.code)}
                       className="cursor-pointer flex items-center gap-2 hover:opacity-80"
                       style={{
-                        backgroundColor: selectedLanguage === lang.code ? `${PRIMARY_COLOR}20` : undefined,
+                        backgroundColor:
+                          selectedLanguage === lang.code
+                            ? `${PRIMARY_COLOR}20`
+                            : undefined,
                       }}
                     >
                       <span>{lang.flag}</span>
@@ -138,13 +161,28 @@ export default function Navbar() {
 
             {/* Desktop Action Icons - Hidden on small screens */}
             <div className="hidden sm:flex items-center gap-3 lg:gap-4">
-              <Button variant="ghost" size="icon" aria-label="Search" className="hover:opacity-80">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Search"
+                className="hover:opacity-80"
+              >
                 <Search className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon" aria-label="Wishlist" className="hover:opacity-80">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Wishlist"
+                className="hover:opacity-80"
+              >
                 <Heart className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon" aria-label="Shopping Cart" className="relative hover:opacity-80">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Shopping Cart"
+                className="relative hover:opacity-80"
+              >
                 <ShoppingCart className="h-5 w-5" />
                 <span
                   className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white"
@@ -156,13 +194,13 @@ export default function Navbar() {
             </div>
 
             {/* Login Button */}
-            <Button
-              asChild
-              className="hidden sm:inline-flex hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: PRIMARY_COLOR }}
+
+            <ReusableModal
+              className="bg-heading text-white cursor-pointer"
+              title="Login"
             >
-              <Link href="/login">Login</Link>
-            </Button>
+              <Login />
+            </ReusableModal>
 
             {/* Mobile Icons and Menu Toggle */}
             <div className="flex items-center gap-2 xl:hidden">
@@ -205,12 +243,20 @@ export default function Navbar() {
                 className="relative z-[80] p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 style={{
-                  backgroundColor: isMobileMenuOpen ? "rgba(255,255,255,0.95)" : "transparent",
+                  backgroundColor: isMobileMenuOpen
+                    ? "rgba(255,255,255,0.95)"
+                    : "transparent",
                   color: isMobileMenuOpen ? PRIMARY_COLOR : "#18181b",
-                  border: isMobileMenuOpen ? `2px solid ${PRIMARY_COLOR}` : "none",
+                  border: isMobileMenuOpen
+                    ? `2px solid ${PRIMARY_COLOR}`
+                    : "none",
                 }}
               >
-                {isMobileMenuOpen ? <X className="h-6 w-6 font-bold" strokeWidth={3} /> : <Menu className="h-6 w-6" />}
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6 font-bold" strokeWidth={3} />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </div>
@@ -221,7 +267,9 @@ export default function Navbar() {
       {/* Full-Screen Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 z-[70] xl:hidden transition-all duration-500 ease-in-out font-inter ${
-          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+          isMobileMenuOpen
+            ? "opacity-100 visible"
+            : "opacity-0 invisible pointer-events-none"
         }`}
         onClick={closeMobileMenu}
       >
@@ -238,7 +286,9 @@ export default function Navbar() {
         {/* Menu Content - Now Scrollable */}
         <div
           className={`relative h-full overflow-y-auto flex flex-col text-white transition-all duration-700 delay-200 px-4 sm:px-6 py-4 ${
-            isMobileMenuOpen ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0"
+            isMobileMenuOpen
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-8 opacity-0"
           }`}
           onClick={(e) => e.stopPropagation()}
         >
@@ -260,12 +310,14 @@ export default function Navbar() {
             <nav className=" mb-6">
               <ul className="space-y-2 sm:space-y-3 max-w-max">
                 {navLinks.map((link, index) => {
-                  const isActive = isActiveLink(link.href)
+                  const isActive = isActiveLink(link.href);
                   return (
                     <li
                       key={link.href}
                       className={`transition-all duration-500 ${
-                        isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-8 opacity-0"
+                        isMobileMenuOpen
+                          ? "translate-x-0 opacity-100"
+                          : "-translate-x-8 opacity-0"
                       }`}
                       style={{ transitionDelay: `${300 + index * 60}ms` }}
                     >
@@ -281,12 +333,14 @@ export default function Navbar() {
                         }}
                         onTouchStart={(e) => {
                           if (!isActive) {
-                            e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)"
+                            e.currentTarget.style.backgroundColor =
+                              "rgba(255,255,255,0.1)";
                           }
                         }}
                         onTouchEnd={(e) => {
                           if (!isActive) {
-                            e.currentTarget.style.backgroundColor = "transparent"
+                            e.currentTarget.style.backgroundColor =
+                              "transparent";
                           }
                         }}
                       >
@@ -299,7 +353,7 @@ export default function Navbar() {
                         />
                       </Link>
                     </li>
-                  )
+                  );
                 })}
               </ul>
             </nav>
@@ -307,7 +361,9 @@ export default function Navbar() {
             {/* Action Buttons Grid - Reduced to 2 items since Search and Cart are now in header */}
             <div
               className={`flex gap-3 mb-6 justify-start transition-all duration-500 ${
-                isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+                isMobileMenuOpen
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-8 opacity-0"
               }`}
               style={{ transitionDelay: "700ms" }}
             >
@@ -328,17 +384,25 @@ export default function Navbar() {
                     className="flex flex-col items-center gap-1 h-16 w-24 bg-white/15 border-white/40 text-white hover:bg-white/25 backdrop-blur-sm transition-all active:scale-95"
                   >
                     <Globe className="h-4 w-4" />
-                    <span className="text-xs font-medium">{selectedLanguage}</span>
+                    <span className="text-xs font-medium">
+                      {selectedLanguage}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="w-32 bg-white/95 backdrop-blur-sm">
+                <DropdownMenuContent
+                  align="center"
+                  className="w-32 bg-white/95 backdrop-blur-sm"
+                >
                   {languages.map((lang) => (
                     <DropdownMenuItem
                       key={lang.code}
                       onClick={() => handleLanguageChange(lang.code)}
                       className="cursor-pointer flex items-center gap-2 hover:opacity-80 active:scale-95 transition-all text-sm"
                       style={{
-                        backgroundColor: selectedLanguage === lang.code ? `${PRIMARY_COLOR}25` : undefined,
+                        backgroundColor:
+                          selectedLanguage === lang.code
+                            ? `${PRIMARY_COLOR}25`
+                            : undefined,
                       }}
                     >
                       <span>{lang.flag}</span>
@@ -352,7 +416,9 @@ export default function Navbar() {
             {/* Login Button */}
             <div
               className={`transition-all duration-500 ${
-                isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+                isMobileMenuOpen
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-8 opacity-0"
               }`}
               style={{ transitionDelay: "800ms" }}
             >
@@ -384,5 +450,5 @@ export default function Navbar() {
         </div>
       </div>
     </>
-  )
+  );
 }
