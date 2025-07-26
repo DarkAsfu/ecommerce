@@ -14,8 +14,8 @@ const SectionBanner = ({ title }) => {
                 <Image className="" src={coco1} alt="coco1" />
             </div>
             <div className="flex flex-col justify-center items-center gap-6 -mt-20">
-                <h1 className="text-[24px] md:text-[48px] font-prate text-heading tracking-[1.44px] ">{title}</h1>
-                <span className="text-heading font-inter text-[14px] md:text-[16px] font-semibold"><span className="md:pr-[35px]">Home</span> | <span className="md:pl-[35px]">{title}</span></span>
+                <h1 className="text-[24px] md:text-[48px] font-prate text-heading tracking-[1.44px] text-center">{title}</h1>
+                <span className="text-heading font-inter text-[14px] md:text-[16px] font-semibold text-center"><span className="md:pr-[35px]">Home</span> | <span className="md:pl-[35px]">{title}</span></span>
             </div>
             <div className="flex justify-end">
                 <Image src={coco2} alt="coco2" />

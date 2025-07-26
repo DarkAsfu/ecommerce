@@ -13,7 +13,7 @@ import cart from "../../../public/cart.svg";
 import Title from "../reusable/Title";
 import { useRef } from "react";
 
-const NewsLetter = () => {
+const NewsLetter = ({ className }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -25,7 +25,7 @@ const NewsLetter = () => {
   ];
 
   return (
-    <div className="mb-[80px]">
+    <div className={`mb-[80px] ${className}`}>
       <div className="container mx-auto">
         {/* Header and Arrows */}
         <div className="lg:flex justify-end items-center px-4 lg:px-15  relative lg:top-20 top-[520px] z-100">

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ReusableModal } from "./reusable/ReusableModal";
 import Login from "./login/Login";
+import ModalManager from "./reusable/ModalManager";
 
 // Navigation links data
 const navLinks = [
@@ -195,12 +196,13 @@ export default function Navbar() {
 
             {/* Login Button */}
 
-            <ReusableModal
+            {/* <ReusableModal
               className="bg-heading text-white cursor-pointer"
               title="Login"
             >
               <Login />
-            </ReusableModal>
+            </ReusableModal> */}
+            <ModalManager />
 
             {/* Mobile Icons and Menu Toggle */}
             <div className="flex items-center gap-2 xl:hidden">
