@@ -11,14 +11,14 @@ const CheckoutForm = () => {
     <div>
       <SectionBanner title="Checkout" />
       <div className="container mx-auto p-4 md:p-8 font-inter">
-        <div className="flex gap-10 my-[120px] justify-between">
+        <div className="flex flex-col md:flex-row gap-10 my-[120px] justify-between">
           {/* Shipping Address Section */}
           <div
             style={{
               background:
                 "var(--Gradient, linear-gradient(92deg, #F1FAFE 0%, #F8DAB0 100%))",
             }}
-            className="p-3 md:p-[30px] rounded-lg max-h-max w-[899px]"
+            className="p-3 md:p-[30px] rounded-lg max-h-max md:w-[899px]"
           >
             <div className="bg-white p-6 rounded-lg space-y-[34px]">
               <h2 className="text-heading font-inter text-[22px] font-semibold mb-5">
@@ -150,7 +150,7 @@ const CheckoutForm = () => {
               background:
                 "var(--Gradient, linear-gradient(92deg, #F1FAFE 0%, #F8DAB0 100%))",
             }}
-            className="p-3 md:p-[30px] rounded-lg w-[681px]"
+            className="p-3 md:p-[30px] rounded-lg md:w-[681px]"
           >
             <div className="bg-white p-6 rounded-lg space-y-6">
               <h2 className="text-heading font-inter text-[22px] font-semibold mb-6 text-center">
