@@ -1,3 +1,7 @@
+"use client";
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { DialogTitle } from "../ui/dialog";
@@ -5,10 +9,49 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 const Login = ({ onOpenRegister, onOpenForgot }) => {
+  const { login } = useAuth();
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    remember: false,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!form.email || !form.password) {
+      return toast.error("Please enter both email and password.");
+    }
+
+    try {
+      const res = await login({
+        email: form.email,
+        password: form.password,
+      });
+      console.log(res)
+      if (res.status) {
+        toast.success("Login successful!");
+        // Optionally close modal or redirect
+      } else {
+        toast.error(res.message || "Login failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response.data.message || "Login failed.");
+    }
+  };
+
   return (
     <div>
       <DialogTitle>
-        <h1 className="text-heading text-[40px] font-prata">Welcome</h1>
+        <p className="text-heading text-[40px] font-prata">Welcome</p>
         <p className="text-heading text-[18px] font-lato mt-[11px] font-normal">
           Please login here
         </p>
@@ -21,10 +64,11 @@ const Login = ({ onOpenRegister, onOpenForgot }) => {
           </Label>
           <Input
             type="email"
-            id="email"
             name="email"
             placeholder="alexa.johnson@example.com"
             className="h-[45px] rounded-none"
+            value={form.email}
+            onChange={handleChange}
           />
         </div>
         <div className="grid gap-3">
@@ -33,17 +77,26 @@ const Login = ({ onOpenRegister, onOpenForgot }) => {
           </Label>
           <Input
             type="password"
-            id="password"
             name="password"
             placeholder="********"
             className="h-[45px] rounded-none"
+            value={form.password}
+            onChange={handleChange}
           />
         </div>
       </div>
 
       <div className="flex items-center justify-between mt-3">
         <div className="flex items-center gap-3">
-          <Checkbox className="w-5 h-5" id="remember" />
+          <Checkbox
+            className="w-5 h-5"
+            id="remember"
+            name="remember"
+            checked={form.remember}
+            onCheckedChange={(checked) =>
+              handleChange({ target: { name: "remember", type: "checkbox", checked } })
+            }
+          />
           <Label htmlFor="remember" className="text-heading font-lato text-[20px]">
             Remember me
           </Label>
@@ -57,7 +110,10 @@ const Login = ({ onOpenRegister, onOpenForgot }) => {
         </button>
       </div>
 
-      <Button className="w-full h-[55px] text-white text-[21.33px] uppercase rounded-none mt-8">
+      <Button
+        onClick={handleSubmit}
+        className="w-full h-[55px] text-white text-[21.33px] uppercase rounded-none mt-8"
+      >
         Login
       </Button>
 

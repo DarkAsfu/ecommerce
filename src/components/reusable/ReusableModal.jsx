@@ -15,7 +15,9 @@ export function ReusableModal({ children, title, className, open, onOpenChange }
           {title}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[660px]">
+      <DialogContent
+        className="max-w-[660px] max-h-[90vh] overflow-y-auto sm:rounded-lg p-6"
+      >
         {children}
       </DialogContent>
     </Dialog>

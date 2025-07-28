@@ -7,6 +7,7 @@ import featured1 from "../../../public/Featured1.png";
 import featured2 from "../../../public/Featured2.png";
 import featured3 from "../../../public/Featured3.png";
 import featured4 from "../../../public/Featured4.png";
+import useFetch from "@/hooks/use-fetch";
 
 // Dummy product data
 const products = [
@@ -53,6 +54,8 @@ const layout = [
 ];
 
 export default function FeatureProduct() {
+  const { data:featuredProducts, loading, error } = useFetch("/get-featured-products");
+  console.log(featuredProducts);
   return (
     <>
     <div className="container mx-auto px-4">

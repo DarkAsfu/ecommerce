@@ -8,8 +8,13 @@ import Review2 from "../../public/reciew2.png"
 import Review3 from "../../public/reciew3.png"
 import Review4 from "../../public/reciew4.png"
 import Sideanimation from "../../public/hero-side-animation.png"
+import useFetch from "@/hooks/use-fetch"
+import Link from "next/link"
 
 export default function Hero() {
+  const { data, loading, error } = useFetch("/get-banner");
+  console.log(data?.data)
+  // const {banner_image, banner_subtitle, banner_title, button_text, button_url} = data?.data
   return (
     <section
       style={{ backgroundImage: `url(${BackgrounImage.src})` }}
@@ -20,15 +25,15 @@ export default function Hero() {
           {/* Left Content */}
           <div className="flex-1 lg:max-w-[60%]">
             <h1 className="text-neutral-900 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl font-normal font-prate leading-tight lg:leading-[134.40px] max-w-full lg:max-w-[800px] mb-4 md:mb-[21px] mt-8 md:mt-20 tracking-tight">
-              Treat Your Skin With Natural Ingredients
+              {data?.data?.banner_title}
             </h1>
             <p className="text-neutral-900 text-lg md:text-xl lg:text-2xl font-normal font-lato leading-relaxed md:leading-9 mb-8 md:mb-[83px] max-w-full lg:max-w-[600px]">
-              We use premium products for a natural result.
+              {data?.data?.banner_subtitle}
             </p>
 
             {/* Responsive Button */}
             <div className="mb-8 md:mb-12">
-              <button className="relative flex items-center group cursor-pointer">
+              <Link href={data?.data?.button_url ? data?.data?.button_url : "/"} className="relative flex items-center group cursor-pointer">
                 <div className="relative">
                   <div className="relative w-[80px] h-[80px] md:w-[100px] md:h-[100px]">
                     <svg width="100%" height="100%" viewBox="0 0 100 100" className="absolute inset-0">
@@ -54,10 +59,10 @@ export default function Hero() {
                     </div>
                   </div>
                   <span className="absolute top-1/2 left-[60px] md:left-[70px] transform -translate-y-1/2 text-[#2D2D2D] text-base md:text-lg font-medium tracking-wide group-hover:text-[#F88C44] transition-colors duration-300 whitespace-nowrap">
-                    SHOP NOW
+                    {data?.data?.button_text}
                   </span>
                 </div>
-              </button>
+              </Link>
             </div>
 
             {/* Reviews Section */}
@@ -123,9 +128,10 @@ export default function Hero() {
             {/* Desktop positioning */}
             <div className="hidden lg:block">
               <img
-                src={SideIMage.src}
+                // src={SideIMage.src}
+                src={data?.data?.banner_image}
                 alt="Hero Image"
-                className="absolute right-[-52px] bottom-[-80px] max-w-[70%] xl:max-w-[75%]"
+                className="absolute right-[-52px] bottom-[-180px] max-w-[70%] xl:max-w-[75%]"
               />
               <img
                 src={Sideanimation.src}

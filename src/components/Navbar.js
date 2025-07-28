@@ -17,11 +17,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ReusableModal } from "./reusable/ReusableModal";
 import Login from "./login/Login";
 import ModalManager from "./reusable/ModalManager";
+import { useAuth } from "@/context/AuthContext";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 // Navigation links data
 const navLinks = [
@@ -49,7 +53,8 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("EN");
   const pathname = usePathname(); // Get current pathname
-
+  const { user, logout } = useAuth();
+  console.log(user)
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -70,7 +75,9 @@ export default function Navbar() {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
-
+  const handleLogout = () => {
+    logout();
+  };
   // Check if link is active
   const isActiveLink = (href) => {
     if (href === "/") {
@@ -202,7 +209,28 @@ export default function Navbar() {
             >
               <Login />
             </ReusableModal> */}
-            <ModalManager />
+            {
+              user ? <DropdownMenu className="cursor-pointer">
+              <DropdownMenuTrigger asChild>
+                <div className="cursor-pointer">
+                  <Avatar className="w-10 h-10">
+                    <AvatarImage src={user.profile_photo} alt={user.name} />
+                    <AvatarFallback>{user.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 mt-2 bg-white text-heading">
+                <DropdownMenuLabel>
+                  <div className="text-sm font-medium">{user.name}</div>
+                  <div className="text-xs text-muted-foreground">{user.email}</div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu> : <ModalManager />
+            }
 
             {/* Mobile Icons and Menu Toggle */}
             <div className="flex items-center gap-2 xl:hidden">

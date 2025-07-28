@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Instagram, Twitter, Facebook } from "lucide-react";
+import useFetch from "@/hooks/use-fetch";
 
 // Custom TikTok icon component since it's not in Lucide
 const TikTokIcon = ({ className }) => (
@@ -15,7 +16,9 @@ const TikTokIcon = ({ className }) => (
   </svg>
 );
 
-export default function Footer() {
+const Footer = () => {
+  const { data: socialData, loading, error } = useFetch("/social");
+  console.log(socialData);
   const aboutUsLinks = [
     { href: "/our-shops", label: "Our Shops" },
     { href: "/contacts", label: "Contacts" },
@@ -32,32 +35,12 @@ export default function Footer() {
     { href: "/shopping-faqs", label: "Shopping FAQs" },
   ];
 
-  const socialLinks = [
-    {
-      href: "https://instagram.com",
-      icon: Instagram,
-      label: "Instagram",
-      ariaLabel: "Follow us on Instagram",
-    },
-    {
-      href: "https://twitter.com",
-      icon: Twitter,
-      label: "Twitter",
-      ariaLabel: "Follow us on Twitter",
-    },
-    {
-      href: "https://facebook.com",
-      icon: Facebook,
-      label: "Facebook",
-      ariaLabel: "Follow us on Facebook",
-    },
-    {
-      href: "https://tiktok.com",
-      icon: TikTokIcon,
-      label: "TikTok",
-      ariaLabel: "Follow us on TikTok",
-    },
-  ];
+  const iconMap = {
+    facebook: Facebook,
+    instagram: Instagram,
+    twitter: Twitter,
+    tiktok: TikTokIcon,
+  };
 
   return (
     <footer className="bg-[#161616] text-white py-15  font-inter">
@@ -74,13 +57,15 @@ export default function Footer() {
 
             {/* Social Media Icons */}
             <div className="flex gap-4">
-              {socialLinks.map((social) => {
-                const IconComponent = social.icon;
+              {socialData?.data?.map((social, id) => {
+                const IconComponent =
+                  iconMap[social.name?.toLowerCase()] || TikTokIcon;
+
                 return (
                   <Link
-                    key={social.label}
-                    href={social.href}
-                    aria-label={social.ariaLabel}
+                    key={id}
+                    href={social.url}
+                    aria-label={social.name}
                     className="w-10 h-10 rounded-full border border-gray-500 flex items-center justify-center hover:border-[#CFA54B] hover:text-[#CFA54B] transition-all duration-300"
                   >
                     <IconComponent className="w-5 h-5" />
@@ -139,4 +124,5 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};
+export default Footer;

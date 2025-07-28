@@ -1,71 +1,137 @@
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
-import { DialogTitle } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+"use client"
+
+import { useState } from "react"
+import { useAuth } from "@/context/AuthContext"
+import { Button } from "../ui/button"
+import { Checkbox } from "../ui/checkbox"
+import { DialogTitle } from "../ui/dialog"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
+import { toast } from "sonner" // Import toast from sonner
 
 const Register = ({ onOpenLogin }) => {
+  const { signup } = useAuth()
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    terms: false,
+  })
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
+
+  const handleSubmit = async () => {
+    if (!form.terms) {
+      toast.error("You must agree to the terms and conditions.")
+      return
+    }
+    if (form.password !== form.confirmPassword) {
+      toast.error("Passwords do not match.")
+      return
+    }
+
+    try {
+      const response = await signup({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        password_confirmation: form.confirmPassword,
+        terms_and_conditions: form.terms,
+      })
+      console.log(response)
+      if (response.status) {
+        toast.success("Registration successful!")
+        // Optional: close modal or redirect
+      } 
+    } catch (err) {
+      console.log(err.response.data.data)
+      for (const field in err.response.data.data) {
+        if (Array.isArray(err.response.data.data[field])) {
+          err.response.data.data[field].forEach((errorMsg) => {
+            toast.error(`${field}: ${errorMsg}`)
+          })
+        }
+      }
+    }
+  }
+
   return (
     <div>
       <DialogTitle>
-        <h1 className="text-heading text-[40px] font-prata">Create New Account</h1>
-        <p className="text-heading text-[18px] font-lato mt-[11px] font-normal">
-          Please Enter Details
-        </p>
+        <p className="text-heading text-[40px] font-prata">Create New Account</p>
+        <p className="text-heading text-[18px] font-lato mt-[11px] font-normal">Please Enter Details</p>
       </DialogTitle>
-
       <div className="grid gap-4 mt-8">
         <div className="grid gap-3">
-          <Label className="text-secondary text-[18px] font-lato font-normal">
-            Name
-          </Label>
+          <Label>Name</Label>
           <Input
             type="text"
-            id="name"
             name="name"
             placeholder="Alexa Johnson"
             className="h-[45px] rounded-none"
+            value={form.name}
+            onChange={handleChange}
           />
         </div>
-
         <div className="grid gap-3">
-          <Label className="text-secondary text-[18px] font-lato font-normal">
-            Email Address
-          </Label>
+          <Label>Email Address</Label>
           <Input
             type="email"
-            id="email"
             name="email"
             placeholder="alexa.johnson@example.com"
             className="h-[45px] rounded-none"
+            value={form.email}
+            onChange={handleChange}
           />
         </div>
-
         <div className="grid gap-3">
-          <Label className="text-secondary text-[18px] font-lato font-normal">
-            Password
-          </Label>
+          <Label>Password</Label>
           <Input
             type="password"
-            id="password"
             name="password"
             placeholder="********"
             className="h-[45px] rounded-none"
+            value={form.password}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="grid gap-3">
+          <Label>Confirm Password</Label>
+          <Input
+            type="password"
+            name="confirmPassword"
+            placeholder="********"
+            className="h-[45px] rounded-none"
+            value={form.confirmPassword}
+            onChange={handleChange}
           />
         </div>
       </div>
-
       <div className="flex items-center gap-3 mt-3">
-        <Checkbox className="w-5 h-5" id="terms" />
+        <Checkbox
+          className="w-5 h-5"
+          id="terms"
+          name="terms"
+          checked={form.terms}
+          onCheckedChange={(checked) => handleChange({ target: { name: "terms", type: "checkbox", checked } })}
+        />
         <Label htmlFor="terms" className="text-heading font-lato text-[20px]">
           I Agree The Terms & Conditions
         </Label>
       </div>
-
-      <Button className="w-full cursor-pointer h-[55px] text-white font-lato text-[21.33px] uppercase rounded-none mt-8">
+      <Button
+        onClick={handleSubmit}
+        className="w-full cursor-pointer h-[55px] text-white font-lato text-[21.33px] uppercase rounded-none mt-8"
+      >
         Register
       </Button>
-
       <button
         type="button"
         onClick={onOpenLogin}
@@ -74,7 +140,7 @@ const Register = ({ onOpenLogin }) => {
         Sign In
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register
