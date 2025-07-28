@@ -191,19 +191,6 @@ For support and questions:
 - Contact the development team
 - Check the documentation
 
-## 🚀 Deployment
 
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Configure environment variables
-3. Deploy automatically on push
-
-### Other Platforms
-- Netlify
-- AWS Amplify
-- Railway
-- DigitalOcean App Platform
-
----
 
 **Built with ❤️ using Next.js and React**
