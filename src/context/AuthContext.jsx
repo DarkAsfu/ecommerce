@@ -1,24 +1,28 @@
+// context/AuthContext.jsx
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
 import axiosInstance from "@/lib/axiosInstance";
-import { toast } from "sonner";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [pendingUser, setPendingUser] = useState(null); // Store email temporarily for OTP
 
+  // Load user from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem("auth_user");
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
+  // Save user to state and localStorage
   const saveUser = (data) => {
     setUser(data);
     localStorage.setItem("auth_user", JSON.stringify(data));
   };
 
+  // Signup handler (stores email in pendingUser if successful)
   const signup = async ({ name, email, password, password_confirmation, terms_and_conditions }) => {
     const res = await axiosInstance.post("/user-signup", {
       name,
@@ -27,35 +31,73 @@ export const AuthProvider = ({ children }) => {
       password_confirmation,
       terms_and_conditions,
     });
-    if (res.data?.status) {
-      saveUser(res.data.data);
+
+    // If registration is accepted, store email for OTP verification
+    if (res.data?.status === true || res.data?.code === 202) {
+      setPendingUser({ email });
     }
+
     return res.data;
   };
 
+  // OTP verification handler
+  const verifyOtp = async ({ email, otp }) => {
+    const res = await axiosInstance.post("/verify/email/otp", {
+      email,
+      otp,
+    });
+
+    // On success, store user and token
+    if (res.data?.status) {
+      const data = {
+        ...res.data.data.user,
+        token: res.data.data.token,
+      };
+      saveUser(data);
+      setPendingUser(null); // clear pending user
+    }
+
+    return res.data;
+  };
+
+  // Login handler
   const login = async ({ email, password }) => {
     const res = await axiosInstance.post("/user-login", { email, password });
+
     if (res.data?.status) {
       saveUser(res.data.data);
     }
+
     return res.data;
   };
 
+  // Logout handler
   const logout = async () => {
     try {
       await axiosInstance.post("/user-logout");
     } catch (err) {
-      console.warn("Logout failed", err);
+      console.warn("Logout failed:", err);
     }
+
     localStorage.removeItem("auth_user");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        pendingUser,
+        signup,
+        verifyOtp,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
+// Hook to access auth context
 export const useAuth = () => useContext(AuthContext);

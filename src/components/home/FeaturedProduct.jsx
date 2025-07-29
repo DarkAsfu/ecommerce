@@ -10,71 +10,70 @@ import featured4 from "../../../public/Featured4.png";
 import useFetch from "@/hooks/use-fetch";
 
 // Dummy product data
-const products = [
-  {
-    id: 1,
-    name: "Skinny Jeans Blue",
-    description: "Classic fit with stretch comfort.",
-    image: featured1,
-    price: 100.00,
-  },
+// const products = [
+//   {
+//     id: 1,
+//     name: "Skinny Jeans Blue",
+//     description: "Classic fit with stretch comfort.",
+//     image: featured1,
+//     price: 100.00,
+//   },
 
-  {
-    id: 2,
-    name: "Cozy Knit Sweater",
-    description: "Soft and warm, perfect for cold days.",
-    image: featured2,
-    price: 100.00,
-  },
-  {
-    id: 3,
-    name: "Casual Sneakers",
-    description: "Comfort meets style in these all-day shoes.",
-    image: featured3,
-    price: 100.00,
-  },
-  {
-    id: 4,
-    name: "Elegant Wristwatch",
-    description: "Timeless design for any occasion.",
-    image: featured4,
-    price: 100.00,
-  },
-];
-
-// Grid layout mapping
-const layout = [
-  { product: products[0], className: "lg:row-span-2" },
-  { product: products[1], className: "" },
-  { product: products[2], className: "lg:col-start-2 lg:row-start-2" },
-  {
-    product: products[3],
-    className: "lg:row-span-2 lg:col-start-3 lg:row-start-1",
-  },
-];
+//   {
+//     id: 2,
+//     name: "Cozy Knit Sweater",
+//     description: "Soft and warm, perfect for cold days.",
+//     image: featured2,
+//     price: 100.00,
+//   },
+//   {
+//     id: 3,
+//     name: "Casual Sneakers",
+//     description: "Comfort meets style in these all-day shoes.",
+//     image: featured3,
+//     price: 100.00,
+//   },
+//   {
+//     id: 4,
+//     name: "Elegant Wristwatch",
+//     description: "Timeless design for any occasion.",
+//     image: featured4,
+//     price: 100.00,
+//   },
+// ];
 
 export default function FeatureProduct() {
-  const { data:featuredProducts, loading, error } = useFetch("/get-featured-products");
-  console.log(featuredProducts);
+  const { data: products, loading, error } = useFetch("/get-featured-products");
+  console.log(products);
+  // Grid layout mapping
+  const layout = [
+    { product: products?.data[0], className: "lg:row-span-2" },
+    { product: products?.data[1], className: "" },
+    { product: products?.data[2], className: "lg:col-start-2 lg:row-start-2" },
+    {
+      product: products?.data[3],
+      className: "lg:row-span-2 lg:col-start-3 lg:row-start-1",
+    },
+  ];
   return (
     <>
-    <div className="container mx-auto px-4">
-      <Title title="Featured Product" />
+      <div className="container mx-auto px-4">
+        <Title title="Featured Product" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-4 pt-10">
-        {layout.map(({ product, className }) => (
-          <div key={product.id} className={`${className}`}>
-            <ProductCard product={product} />
-          </div>
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-4 pt-10">
+          {layout.map(({ product, className }) => (
+            <div key={product?.id} className={`${className}`}>
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center items-center mt-5 mb-[26px]">
+          <h1 className="text-[16px] md:text-[20px] font-medium text-heading font-kaiseiHarunoUmi">
+            View All
+          </h1>
+        </div>
       </div>
-      <div className="flex justify-center items-center mt-5 mb-[26px]">
-        <h1 className="text-[16px] md:text-[20px] font-medium text-heading font-kaiseiHarunoUmi">
-          View All
-        </h1>
-      </div>
-    </div>
-    <hr className=" border-[#BEBEBE] mb-[160px]" />
+      <hr className=" border-[#BEBEBE] mb-[160px]" />
     </>
   );
 }
@@ -89,10 +88,10 @@ function ProductCard({ product }) {
       {/* Product Image */}
       <div className="relative h-full min-h-[480px] w-full">
         <Image
-          src={product.image}
-          alt={product.name}
+          src={product?.product_image}
+          alt={product?.product_name}
           fill
-          className="object-cover"
+          className="object-cover"  
           //   sizes="(max-width: 768px) 100vw, 300px"
         />
         <div className="absolute top-3 right-3 z-10">
@@ -108,10 +107,10 @@ function ProductCard({ product }) {
       <div className="absolute inset-0 flex flex-col items-start justify-end p-5 ">
         <div className="flex justify-between items-center w-full">
           <h3 className="text-[16px] md:text-[24px] font-semibold text-heading font-inter">
-            {product.name}
+            {product?.product_name}
           </h3>
           <span className="text-[16px] md:text-[24px] font-semibold text-heading font-inter">
-            KD {product.price.toFixed(2)}
+            KD {product?.regular_price.toFixed(2)}
           </span>
         </div>
         {/* <p className="mt-1 text-sm text-white line-clamp-2">

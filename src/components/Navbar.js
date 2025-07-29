@@ -210,7 +210,7 @@ export default function Navbar() {
               <Login />
             </ReusableModal> */}
             {
-              user ? <DropdownMenu className="cursor-pointer">
+              user ? <DropdownMenu className="cursor-pointer font-inter">
               <DropdownMenuTrigger asChild>
                 <div className="cursor-pointer">
                   <Avatar className="w-10 h-10">
@@ -219,7 +219,7 @@ export default function Navbar() {
                   </Avatar>
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 mt-2 bg-white text-heading">
+              <DropdownMenuContent className="w-56 mt-2 bg-white text-heading font-inter">
                 <DropdownMenuLabel>
                   <div className="text-sm font-medium">{user.name}</div>
                   <div className="text-xs text-muted-foreground">{user.email}</div>
