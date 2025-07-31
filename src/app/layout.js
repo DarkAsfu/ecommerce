@@ -28,8 +28,8 @@ export default function RootLayout({ children }) {
         <main className="min-h-screen">{children}</main>
         <Footer />
       </AuthProvider>
-      </body>
       <Toaster position="top-right" /> 
+      </body>
     </html>
   );
 }

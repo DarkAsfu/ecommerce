@@ -62,7 +62,7 @@ const SwiperCarousel = ({
           }}
           className="mt-8"
         >
-          {items.map((item, index) => (
+          {items?.map((item, index) => (
             <SwiperSlide key={index}>{renderSlide(item, index)}</SwiperSlide>
           ))}
         </Swiper>

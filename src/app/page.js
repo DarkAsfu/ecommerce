@@ -15,20 +15,6 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DialogContent } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 export default function Home() {
-  const blogPost = [
-    {
-      id: 1,
-      title: "Radiant Skincare, Naturally Perfected!",
-      description: "Elevate your beauty routine with products crafted to enhance your natural glow.",
-      image: blog1,
-    },
-    {
-      id: 2,
-      title: "Pure Beauty, Perfectly Crafted!",
-      description: "Discover the essence of self-care with our luxurious beauty products.",
-      image: blog2,
-    },
-  ];
   return (
     <div className="">
       <Hero/>
@@ -39,7 +25,7 @@ export default function Home() {
       <OurReviews/>
       <Support/>
       <PopularVideo/>
-      <BlogPost blogPost={blogPost}/> 
+      <BlogPost/> 
       <NewsLetter/>
       {/* <Dialog open={true}>
         <DialogTrigger asChild>

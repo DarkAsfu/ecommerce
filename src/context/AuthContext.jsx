@@ -74,7 +74,18 @@ export const AuthProvider = ({ children }) => {
   // Logout handler
   const logout = async () => {
     try {
-      await axiosInstance.post("/user-logout");
+      const authUser = localStorage.getItem("auth_user");
+      const token = authUser ? JSON.parse(authUser).token : null;
+      
+      if (token) {
+        await axiosInstance.post("/user-logout", {}, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+      } else {
+        await axiosInstance.post("/user-logout");
+      }
     } catch (err) {
       console.warn("Logout failed:", err);
     }

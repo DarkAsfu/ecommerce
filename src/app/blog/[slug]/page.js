@@ -1,3 +1,4 @@
+"use client"
 import SectionBanner from "@/components/reusable/SectionBanner";
 import Image from "next/image";
 import blog1 from "../../../../public/blog1.png";
@@ -6,15 +7,89 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageSquare } from "lucide-react";
 import NewsLetter from "@/components/home/NewsLetter";
+import { useParams } from "next/navigation";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const BlogDetail = () => {
+  const { slug } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get/blog-details`, {
+          blog_id: slug,
+        });
+        
+        // Handle the response structure - data is an array, get the first item
+        if (res.data.status && res.data.data && res.data.data.length > 0) {
+          setBlog(res.data.data[0]); // Get the first blog from the array
+        } else {
+          setError("Blog not found");
+        }
+      } catch (err) {
+        console.error('Error fetching blog:', err);
+        setError(err.response?.data?.message || "Failed to load blog");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (slug) {
+      fetchBlog();
+    }
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div>
+        <SectionBanner title="Blog" />
+        <div className="container py-20">
+          <div className="text-center">Loading blog...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !blog) {
+    return (
+      <div>
+        <SectionBanner title="Blog" />
+        <div className="container py-20">
+          <div className="text-center text-red-500">
+            {error || "Blog not found"}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Format the date
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   return (
     <div>
       <SectionBanner title="Blog" />
       <div className="md:mt-[120px] max-w-[983px] mx-auto">
         <Image
-          src={blog1}
-          alt="blog"
+          src={blog?.image || blog1.src}
+          alt={blog?.title || "Blog image"}
+          width={983}
+          height={741}
           className="w-full h-[741px] object-cover object-center"
         />
       </div>
@@ -23,27 +98,15 @@ const BlogDetail = () => {
           {/* Blog Post Header */}
           <div className="mb-8">
             <p className="text-[28px] font-lato text-[#484848] mb-2">
-              November 27, 2022 | Skin Care
+              {formatDate(blog?.created_at)}
             </p>
-            <h1 className="text-[44px]  font-prata text-heading mb-6">
-              Radiant Skincare, Naturally Perfected!
+            <h1 className="text-[44px] font-prata text-heading mb-6">
+              {blog?.title}
             </h1>
-            <p className="text-[24px] font-lato text-[#484848]">
-              Elevate your beauty routine with products crafted to enhance your
-              natural glow. Elevate your beauty routine with products crafted to
-              enhance your natural glow. Elevate your beauty routine with
-              products crafted to enhance your natural glow. Elevate your beauty
-              routine with products crafted to enhance your natural glow.
-              Elevate your beauty routine with products crafted to enhance your
-              natural glow. Elevate your beauty routine with products
-            </p>
-            <br />
-            <p className="text-[24px] font-lato text-[#484848]">
-              Elevate your beauty routine with products crafted to enhance your
-              natural glow. Elevate your beauty routine with products crafted to
-              enhance your natural glow. Elevate your beauty routine with
-              products crafted to enhance your natural
-            </p>
+            <div 
+              className="text-[24px] font-lato text-[#484848]"
+              dangerouslySetInnerHTML={{ __html: blog?.description }}
+            />
           </div>
 
           {/* Comments Section */}
@@ -79,7 +142,7 @@ const BlogDetail = () => {
 
             {/* Leave a Reply Form */}
             <div className="bg-[#FAF6ED] p-6 shadow-sm">
-              <h3 className="text-[28px]  font-semibold text-heading font-prata mb-2">
+              <h3 className="text-[28px] font-semibold text-heading font-prata mb-2">
                 Leave a Reply
               </h3>
               <p className="text-[16px] text-[#484848] font-lato mb-4">
@@ -118,9 +181,9 @@ const BlogDetail = () => {
                   />
                 </div>
                 <div className="flex justify-end">
-                <Button className="w-full bg-heading hover:bg-gray-800 text-white text-[16px] font-medium h-[40px] py-[10px] px-[30px] rounded-none max-w-max">
-                  Send Comment
-                </Button>
+                  <Button className="w-full bg-heading hover:bg-gray-800 text-white text-[16px] font-medium h-[40px] py-[10px] px-[30px] rounded-none max-w-max">
+                    Send Comment
+                  </Button>
                 </div>
               </div>
             </div>

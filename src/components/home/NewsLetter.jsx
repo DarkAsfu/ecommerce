@@ -11,11 +11,15 @@ import model from "../../../public/nlproductm.png";
 import product from "../../../public/product.png";
 import cart from "../../../public/cart.svg";
 import Title from "../reusable/Title";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { toast } from "sonner"
+
 
 const NewsLetter = ({ className }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const offers = [
     { id: 1, image: model },
@@ -24,22 +28,62 @@ const NewsLetter = ({ className }) => {
     { id: 4, image: model },
   ];
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!email) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/newsletter-store`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.status === true) {
+        toast(data.data);
+        setEmail("");
+      } else {
+        toast.error(data.data.errors.email[0] || "Subscription failed. Please try again.");
+      }
+    } catch (error) {
+      toast("Network error. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={`mb-[80px] ${className}`}>
       <div className="container mx-auto">
         {/* Header and Arrows */}
-        <div className="lg:flex justify-end items-center px-4 lg:px-15  relative lg:top-20 top-[520px] z-100">
-          {/* <Title title="Available Offers" /> */}
+        <div className="lg:flex justify-end items-center px-4 lg:px-15 relative lg:top-20 top-[520px] z-100">
           <div className="flex justify-self-end gap-6">
             <button
               ref={prevRef}
-              className="bg-white hover:bg-gray-100 border cursor-pointer p-3 rounded-full  transition"
+              className="bg-white hover:bg-gray-100 border cursor-pointer p-3 rounded-full transition"
+              aria-label="Previous offer"
             >
               <ArrowLeft className="text-heading" size={16} />
             </button>
             <button
               ref={nextRef}
-              className="bg-white hover:bg-gray-100 border cursor-pointer p-3 rounded-full  transition"
+              className="bg-white hover:bg-gray-100 border cursor-pointer p-3 rounded-full transition"
+              aria-label="Next offer"
             >
               <ArrowRight className="text-heading" size={16} />
             </button>
@@ -47,7 +91,7 @@ const NewsLetter = ({ className }) => {
         </div>
 
         {/* Carousel */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 px-4 pt-10 lg:px-15 justify-between items-center bg-[#F8DAB0] ">
+        <div className="grid grid-cols-1 lg:grid-cols-2 px-4 pt-10 lg:px-15 justify-between items-center bg-[#F8DAB0]">
           <div className="">
             <h1 className="text-[44px] font-inter text-heading font-bold">
               Subscribe our newsletter
@@ -56,16 +100,23 @@ const NewsLetter = ({ className }) => {
               The ideal way to stay in contact and learn about our exclusive
               Offers.
             </p>
-            <div className="flex flex-col gap-4 w-full lg:w-[413px] mt-[30px]">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full lg:w-[413px] mt-[30px]">
               <input
-                type="text"
+                type="email"
                 placeholder="Your email address"
                 className="w-full bg-white px-6 py-4 text-heading placeholder:text-heading font-inter text-[16px] font-normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <button className="bg-heading text-white mt-4 px-6 py-4 rounded-none font-inter font-semibold">
-                Subscribe
+              <button 
+                type="submit"
+                className="bg-heading text-white mt-4 px-6 py-4 rounded-none font-inter font-semibold hover:bg-opacity-90 transition disabled:opacity-70"
+                disabled={isLoading}
+              >
+                {isLoading ? "Subscribing..." : "Subscribe"}
               </button>
-            </div>
+            </form>
           </div>
           <div className="">
             <Swiper
@@ -75,7 +126,6 @@ const NewsLetter = ({ className }) => {
                 nextEl: nextRef.current,
               }}
               onInit={(swiper) => {
-                // Reassign navigation elements once refs are defined
                 swiper.params.navigation.prevEl = prevRef.current;
                 swiper.params.navigation.nextEl = nextRef.current;
                 swiper.navigation.init();
@@ -91,14 +141,8 @@ const NewsLetter = ({ className }) => {
             >
               {offers.map((offer) => (
                 <SwiperSlide key={offer.id}>
-                  {/* <Image
-                src={offer.image}
-                alt={`Offer ${offer.id}`}
-                className="w-full h-auto object-cover rounded"
-                placeholder="blur"
-              /> */}
                   <div className="">
-                    <div className="flex flex-col lg:flex-row ">
+                    <div className="flex flex-col lg:flex-row">
                       <Image
                         src={model}
                         alt={`Offer ${offer.id}`}
@@ -106,7 +150,7 @@ const NewsLetter = ({ className }) => {
                         placeholder="blur"
                       />
                       <div className="bg-white p-4 max-h-max mt-[25%] rounded-[24px] order-1 lg:order-2">
-                        <div className="flex justify-between items-center gap-6 ">
+                        <div className="flex justify-between items-center gap-6">
                           <div className="">
                             <div>
                               <h4 className="text-[18px] font-inter text-heading">
@@ -120,7 +164,7 @@ const NewsLetter = ({ className }) => {
                               <Image
                                 src={cart}
                                 alt="cart"
-                                className=" w-[24px] h-[25px]"
+                                className="w-[24px] h-[25px]"
                               />
                             </div>
                           </div>
@@ -128,7 +172,7 @@ const NewsLetter = ({ className }) => {
                             <div className="bg-[#2B2627] rounded-[12px] px-9">
                               <Image
                                 src={product}
-                                alt="model"
+                                alt="product"
                                 className="w-[76px]"
                               />
                             </div>
@@ -136,7 +180,6 @@ const NewsLetter = ({ className }) => {
                         </div>
                       </div>
                     </div>
-                    <div></div>
                   </div>
                 </SwiperSlide>
               ))}
