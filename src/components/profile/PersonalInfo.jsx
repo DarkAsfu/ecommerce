@@ -140,7 +140,7 @@ const PersonalInfo = ({ initialData }) => {
                 },
               })}
               className="w-full !text-[24.008px] mt-3 bg-white h-[75px] placeholder:text-[24.008px]"
-              placeholder="Enter phone number"
+              placeholder="Enter phone number (e.g. +96551234567)"
             />
             {errors.phone && (
               <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>

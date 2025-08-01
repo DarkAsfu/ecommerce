@@ -11,6 +11,7 @@ import {
   X,
   ChevronDown,
   Globe,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -128,7 +129,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 font-inter">
+      <header className="sticky top-0 z-100 w-full border-b border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 font-inter">
         <div className="container mx-auto flex h-16 md:h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link
@@ -266,6 +267,13 @@ export default function Navbar() {
                   <div className="text-sm font-medium">{user.name}</div>
                   <div className="text-xs text-muted-foreground">{user.email}</div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer" >
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
                   Logout

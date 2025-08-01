@@ -4,10 +4,13 @@ import { Minus, Plus, Trash2 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { cartUtils } from "@/lib/utils"
 import { toast } from "sonner"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const CartTable = ({ onProductSelect }) => {
   const [cartItems, setCartItems] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
   // Load cart data from localStorage on component mount
   useEffect(() => {
@@ -102,20 +105,39 @@ const CartTable = ({ onProductSelect }) => {
   const deliveryCharge = subtotal > 0 ? 5.0 : 0 // Example delivery charge
   const total = subtotal + deliveryCharge
 
-  
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      toast.error('Your cart is empty')
+      return
+    }
+
+    // Prepare checkout data
+    const checkoutData = {
+      items: cartItems,
+      subtotal: subtotal,
+      deliveryCharge: deliveryCharge,
+      total: total
+    }
+
+    // Store checkout data in localStorage
+    localStorage.setItem('checkout_data', JSON.stringify(checkoutData))
+    
+    // Navigate to checkout page
+    router.push('/checkout')
+  }
 
   if (cartItems.length === 0) {
     return (
-      <div className=" mt-[120px] p-8">
+      <div className=" mt-[120px] p-8 font-inter">
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
           <p className="text-gray-600 mb-6">Add some products to your cart to get started!</p>
-          <Button 
-            onClick={() => window.history.back()}
-            className="bg-heading hover:bg-gray-800 text-white"
+          <Link href="/products"
+            // onClick={() => window.history.back()}
+            className="bg-heading hover:bg-gray-800 text-white p-4 rounded-md"
           >
             Continue Shopping
-          </Button>
+          </Link>
         </div>
       </div>
     )
@@ -257,7 +279,10 @@ const CartTable = ({ onProductSelect }) => {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full bg-black hover:bg-gray-800 text-white py-[25px] text-lg font-medium">
+                <Button 
+                  className="w-full bg-black hover:bg-gray-800 text-white py-[25px] text-lg font-medium"
+                  onClick={handleCheckout}
+                >
                   Checkout
                 </Button>
                 <Button 

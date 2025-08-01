@@ -39,6 +39,10 @@ const ChangePassword = () => {
       }))
     }
   }
+const newFrom = new FormData()
+newFrom.append("current_password", formData.current_password)
+newFrom.append("new_password", formData.new_password)
+newFrom.append("new_password_confirmation", formData.new_password_confirmation)
 
   const validateForm = () => {
     const newErrors = {}
@@ -69,11 +73,7 @@ const ChangePassword = () => {
     setIsLoading(true)
     
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile/reset-password`, {
-        current_password: formData.current_password,
-        new_password: formData.new_password,
-        new_password_confirmation: formData.new_password_confirmation
-      }, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile/reset-password`,newFrom, {
         headers: {
           "Authorization": `Bearer ${JSON.parse(localStorage.getItem("auth_user")).token}`
         }

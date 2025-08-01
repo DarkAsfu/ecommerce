@@ -3,6 +3,7 @@ import SectionBanner from "@/components/reusable/SectionBanner";
 import ProductCard from "@/components/products/ProductCard";
 import Title from "@/components/reusable/Title";
 import NewsLetter from "@/components/home/NewsLetter";
+import ProtectedRoute from "@/components/reusable/ProtectedRoute";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -23,7 +24,7 @@ const WishlistPage = () => {
   }, []);
   console.log(wishlist);
   return (
-    <>
+    <ProtectedRoute>
       <SectionBanner title="Wish List" />
       <div className="mt-[120px] mb-[120px]">
         <div className="container mx-auto p-4 md:p-8 font-inter">
@@ -40,7 +41,7 @@ const WishlistPage = () => {
         </div>
       </div>
       <NewsLetter/>
-    </>
+    </ProtectedRoute>
   );
 };
 

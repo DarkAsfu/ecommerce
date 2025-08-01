@@ -9,15 +9,32 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [pendingUser, setPendingUser] = useState(null); // Store email temporarily for OTP
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem("auth_user");
-    if (stored) setUser(JSON.parse(stored));
+    const loadUser = () => {
+      try {
+        const stored = localStorage.getItem("auth_user");
+        console.log("AuthContext - Loading user from localStorage:", stored);
+        if (stored) {
+          const userData = JSON.parse(stored);
+          console.log("AuthContext - Parsed user data:", userData);
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error("AuthContext - Error loading user:", error);
+        localStorage.removeItem("auth_user");
+      }
+      setIsLoading(false);
+    };
+
+    loadUser();
   }, []);
 
   // Save user to state and localStorage
   const saveUser = (data) => {
+    console.log("AuthContext - Saving user:", data);
     setUser(data);
     localStorage.setItem("auth_user", JSON.stringify(data));
   };
@@ -99,6 +116,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         pendingUser,
+        isLoading,
         signup,
         verifyOtp,
         login,

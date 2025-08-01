@@ -7,7 +7,7 @@ const Videos = () => {
   return (
     <div>
       <SectionBanner title="Videos" />
-      {/* <FeaturedVideo /> */}
+      <FeaturedVideo />
       <div className="mt-[160px]">
         <PopularVideo />
       </div>

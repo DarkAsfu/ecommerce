@@ -66,7 +66,7 @@ const Login = ({ onOpenRegister, onOpenForgot }) => {
             type="email"
             name="email"
             placeholder="alexa.johnson@example.com"
-            className="h-[45px] rounded-none"
+            className="h-[45px] rounded-none text-heading"
             value={form.email}
             onChange={handleChange}
           />
@@ -79,7 +79,7 @@ const Login = ({ onOpenRegister, onOpenForgot }) => {
             type="password"
             name="password"
             placeholder="********"
-            className="h-[45px] rounded-none"
+            className="h-[45px] rounded-none text-heading"
             value={form.password}
             onChange={handleChange}
           />

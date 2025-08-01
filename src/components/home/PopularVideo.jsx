@@ -12,6 +12,7 @@ import Title from "../reusable/Title";
 import { useRef } from "react";
 import HeroVideoDialog from "../magicui/hero-video-dialog";
 import useFetch from "@/hooks/use-fetch";
+import Link from "next/link";
 
 const PopularVideo = () => {
   const { data: videos, loading, error } = useFetch("/get-popular-video");
@@ -94,9 +95,9 @@ const PopularVideo = () => {
 
         {/* View All */}
         <div className="flex justify-center items-center mt-5 mb-[26px]">
-          <h1 className="text-[16px] md:text-[20px] font-medium text-heading font-kaiseiHarunoUmi cursor-pointer hover:underline">
+          <Link href="/videos" className="text-[16px] md:text-[20px] font-medium text-heading font-kaiseiHarunoUmi cursor-pointer hover:underline">
             View All
-          </h1>
+          </Link>
         </div>
       </div>
 

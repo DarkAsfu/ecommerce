@@ -8,11 +8,13 @@ import "swiper/css/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import model from "../../../public/nlproductm.png";
-import product from "../../../public/product.png";
+import product2 from "../../../public/product.png";
 import cart from "../../../public/cart.svg";
 import Title from "../reusable/Title";
 import { useRef, useState } from "react";
 import { toast } from "sonner"
+import useFetch from "@/hooks/use-fetch";
+import { cartUtils } from "@/lib/utils";
 
 
 const NewsLetter = ({ className }) => {
@@ -20,13 +22,41 @@ const NewsLetter = ({ className }) => {
   const nextRef = useRef(null);
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { data: products, loading, error } = useFetch("/get-featured-products");
+  console.log(products?.data)
+  // const offers = [
+  //   { id: 1, image: model },
+  //   { id: 2, image: model },
+  //   { id: 3, image: model },
+  //   { id: 4, image: model },
+  // ];
 
-  const offers = [
-    { id: 1, image: model },
-    { id: 2, image: model },
-    { id: 3, image: model },
-    { id: 4, image: model },
-  ];
+  const handleAddToCart = (product) => {
+    try {
+      // Check if product already exists in cart
+      const existingCart = cartUtils.getCart();
+      const existingProductIndex = existingCart.findIndex(
+        item => item.product_id === product.id
+      );
+      
+      // Use utility function to add/update cart with quantity 1
+      const success = cartUtils.addToCart(product, 1);
+      
+      if (success) {
+        if (existingProductIndex !== -1) {
+          toast.success(`Quantity updated for ${product.product_name}`);
+        } else {
+          toast.success(`${product.product_name} added to cart!`);
+        }
+      } else {
+        toast.error('Failed to add product to cart. Please try again.');
+      }
+      
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.error('Failed to add product to cart. Please try again.');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,28 +169,31 @@ const NewsLetter = ({ className }) => {
               }}
               className="mt-8"
             >
-              {offers.map((offer) => (
-                <SwiperSlide key={offer.id}>
+              {products?.data?.map((product) => (
+                <SwiperSlide key={product.id}>
                   <div className="">
                     <div className="flex flex-col lg:flex-row">
                       <Image
                         src={model}
-                        alt={`Offer ${offer.id}`}
-                        className="flex h-auto object-contain order-2 lg:order-1"
+                        alt={product.product_name}
+                        className="w-[500px] flex h-auto object-cover order-2 lg:order-1 border"
                         placeholder="blur"
                       />
-                      <div className="bg-white p-4 max-h-max mt-[25%] rounded-[24px] order-1 lg:order-2">
+                      <div className="bg-white p-4 max-h-max  rounded-[24px] order-1 lg:order-2 border">
                         <div className="flex justify-between items-center gap-6">
                           <div className="">
                             <div>
                               <h4 className="text-[18px] font-inter text-heading">
-                                Price
+                                {product.product_name}
                               </h4>
                               <h4 className="text-[20px] font-inter text-heading font-semibold leading-[29px]">
-                                KD 10.00
+                                KD {product.regular_price}
                               </h4>
                             </div>
-                            <div className="max-w-max pl-[11px] pr-3 py-3 rounded-full border bg-[#2B2627] mt-[35px]">
+                            <div 
+                              className="max-w-max pl-[11px] pr-3 py-3 rounded-full border bg-[#2B2627] mt-[35px] cursor-pointer hover:bg-opacity-80 transition"
+                              onClick={() => handleAddToCart(product)}
+                            >
                               <Image
                                 src={cart}
                                 alt="cart"
@@ -169,11 +202,14 @@ const NewsLetter = ({ className }) => {
                             </div>
                           </div>
                           <div>
-                            <div className="bg-[#2B2627] rounded-[12px] px-9">
+                            <div className="bg-[#2B2627] w-[148px] h-[153px] rounded-[12px] px-9 flex items-center justify-center">
                               <Image
-                                src={product}
-                                alt="product"
-                                className="w-[76px]"
+                                src={product.product_image}
+                                // alt="product"
+                                className="w-[100px] h-[100px] object-cover"
+                                width={100}
+                                height={100}
+                                alt={product.product_name}
                               />
                             </div>
                           </div>
