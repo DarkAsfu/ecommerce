@@ -4,58 +4,12 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Title from "../reusable/Title";
-
-const reviews = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    designation: "Beauty Blogger",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    review:
-      "Absolutely loved this product! It made my skin feel fresh and glowing after just one use.",
-    rating: 5,
-  },
-  {
-    id: 2,
-    name: "Mark Thompson",
-    designation: "Skincare Expert",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    review:
-      "One of the best formulas I've come across. High-quality and simple to use.",
-    rating: 4,
-  },
-  {
-    id: 3,
-    name: "Emily Davis",
-    designation: "Model & Influencer",
-    image: "https://randomuser.me/api/portraits/women/65.jpg",
-    review:
-      "My go-to skincare essential now. The results are visible and long-lasting!",
-    rating: 5,
-  },
-  {
-    id: 4,
-    name: "Mark Thompson",
-    designation: "Skincare Expert",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    review:
-      "One of the best formulas I've come across. High-quality and simple to use.",
-    rating: 4,
-  },
-  {
-    id: 5,
-    name: "Emily Davis",
-    designation: "Model & Influencer",
-    image: "https://randomuser.me/api/portraits/women/65.jpg",
-    review:
-      "My go-to skincare essential now. The results are visible and long-lasting!",
-    rating: 5,
-  },
-];
+import useFetch from "@/hooks/use-fetch";
+import Skeleton from "react-loading-skeleton"; // Add a skeleton loader component
 
 export default function ReviewsCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [visibleReviews, setVisibleReviews] = useState(reviews.slice(0, 3));
+  const { data: reviews, loading, error } = useFetch("/get-admin/review");
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -63,34 +17,83 @@ export default function ReviewsCarousel() {
       setIsMobile(window.innerWidth < 768);
     };
 
-    handleResize(); // Set initial value
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
+  // Safely get reviews data or default to empty array
+  const reviewData = reviews?.data || [];
+
+  // Calculate visible reviews based on device type
+  const getVisibleReviews = () => {
+    if (loading || error) return [];
     if (isMobile) {
-      // For mobile, just show the current review
-      setVisibleReviews([reviews[currentIndex]]);
-    } else {
-      // For desktop, show current-1, current, current+1
-      const start = Math.max(0, currentIndex - 1);
-      const end = Math.min(reviews.length, currentIndex + 2);
-      setVisibleReviews(reviews.slice(start, end));
+      return reviewData.length > 0 ? [reviewData[currentIndex]] : [];
     }
-  }, [currentIndex, isMobile]);
+    // For desktop, show current-1, current, current+1
+    const start = Math.max(0, currentIndex - 1);
+    const end = Math.min(reviewData.length, currentIndex + 2);
+    return reviewData.slice(start, end);
+  };
+
+  const visibleReviews = getVisibleReviews();
 
   const nextSlide = () => {
     if (isMobile) {
-      setCurrentIndex((prev) => Math.min(prev + 1, reviews.length - 1));
+      setCurrentIndex((prev) => Math.min(prev + 1, reviewData.length - 1));
     } else {
-      setCurrentIndex((prev) => Math.min(prev + 1, reviews.length - 2));
+      setCurrentIndex((prev) => Math.min(prev + 1, reviewData.length - 2));
     }
   };
 
   const prevSlide = () => {
     setCurrentIndex((prev) => Math.max(isMobile ? 0 : 1, prev - 1));
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="bg-[#F8DAB0] py-16 lg:py-20">
+        <div className="container px-4">
+          <Title title="Our Reviews" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} height={300} className="rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="bg-[#F8DAB0] py-16 lg:py-20">
+        <div className="container px-4">
+          <Title title="Our Reviews" />
+          <p className="text-center py-10 text-red-500">
+            Failed to load reviews. Please try again later.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  // No reviews state
+  if (reviewData.length === 0) {
+    return (
+      <section className="bg-[#F8DAB0] py-16 lg:py-20">
+        <div className="container px-4">
+          <Title title="Our Reviews" />
+          <p className="text-center py-10 text-gray-500">
+            No reviews available yet.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-[#F8DAB0] py-16 lg:py-20">
@@ -107,6 +110,7 @@ export default function ReviewsCarousel() {
               variant="outline"
               size="icon"
               className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              aria-label="Previous review"
             >
               <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 text-gray-700" />
             </Button>
@@ -114,12 +118,13 @@ export default function ReviewsCarousel() {
               onClick={nextSlide}
               disabled={
                 isMobile
-                  ? currentIndex >= reviews.length - 1
-                  : currentIndex >= reviews.length - 2
+                  ? currentIndex >= reviewData.length - 1
+                  : currentIndex >= reviewData.length - 2
               }
               variant="outline"
               size="icon"
               className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              aria-label="Next review"
             >
               <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-gray-700" />
             </Button>
@@ -133,6 +138,7 @@ export default function ReviewsCarousel() {
             className={`hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 transition-all duration-300 ${
               isMobile ? "opacity-0" : "opacity-100"
             }`}
+            aria-live="polite"
           >
             {visibleReviews.map((review, index) => {
               const isActive = index === 1 && !isMobile;
@@ -153,20 +159,22 @@ export default function ReviewsCarousel() {
                     ${isRight ? "-translate-x-2" : ""}
                     hover:scale-[1.02] hover:shadow-lg
                   `}
+                  aria-hidden={!isActive && !isMobile}
                 >
                   {/* Profile Section */}
                   <div className="flex items-center gap-[14px] mb-[25px]">
                     <img
-                      src={review.image}
+                      src={review.photo}
                       alt={review.name}
                       className="w-[60px] h-[60px] rounded-full object-cover border-2 border-gray-100"
+                      loading="lazy"
                     />
                     <div>
                       <h3 className="font-semibold text-[20px] font-inter text-heading mb-[8px]">
                         {review.name}
                       </h3>
                       <p className="text-[14px] text-secondary font-inter">
-                        {review.designation}
+                        {review.profession}
                       </p>
                     </div>
                   </div>
@@ -174,17 +182,17 @@ export default function ReviewsCarousel() {
                   {/* Review Text */}
                   <div className="mb-[20px]">
                     <p className="text-[16px] text-secondary font-inter leading-[24px]">
-                      {review.review}
+                      {review.review_content}
                     </p>
                   </div>
 
                   {/* Star Rating */}
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1" aria-label={`Rating: ${review.rating_point} out of 5`}>
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
                         className={`w-5 h-5 ${
-                          i < review.rating
+                          i < review.rating_point
                             ? "fill-yellow-400 text-yellow-400"
                             : "text-gray-300"
                         }`}
@@ -201,25 +209,27 @@ export default function ReviewsCarousel() {
             className={`md:hidden transition-all duration-300 ${
               isMobile ? "opacity-100" : "opacity-0"
             }`}
+            aria-live="polite"
           >
-            {visibleReviews.map((review) => (
+            {visibleReviews.map((review, index) => (
               <div
-                key={`${review.id}-mobile`}
+                key={`${review.id}-mobile-${index}`}
                 className="bg-white rounded-lg px-[46px] py-[38px] shadow-lg mx-auto max-w-md"
               >
                 {/* Profile Section */}
                 <div className="flex items-center gap-4 mb-6">
                   <img
-                    src={review.image}
+                    src={review.photo}
                     alt={review.name}
                     className="w-[60px] h-[60px] rounded-full object-cover border-2 border-gray-100"
+                    loading="lazy"
                   />
                   <div>
                     <h3 className="font-semibold text-[20px] font-inter text-heading mb-[8px]">
                       {review.name}
                     </h3>
                     <p className="text-[14px] text-secondary font-inter">
-                      {review.designation}
+                      {review.profession}
                     </p>
                   </div>
                 </div>
@@ -227,17 +237,17 @@ export default function ReviewsCarousel() {
                 {/* Review Text */}
                 <div className="my-5">
                   <p className="text-[16px] text-secondary font-inter leading-[24px]">
-                    {review.review}
+                    {review.review_content}
                   </p>
                 </div>
 
                 {/* Star Rating */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1" aria-label={`Rating: ${review.rating_point} out of 5`}>
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       className={`w-5 h-5 ${
-                        i < review.rating
+                        i < review.rating_point
                           ? "fill-yellow-400 text-yellow-400"
                           : "text-gray-300"
                       }`}

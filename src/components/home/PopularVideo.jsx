@@ -11,24 +11,28 @@ import offer from "../../../public/offer.png";
 import Title from "../reusable/Title";
 import { useRef } from "react";
 import HeroVideoDialog from "../magicui/hero-video-dialog";
+import useFetch from "@/hooks/use-fetch";
+import Link from "next/link";
 
 const PopularVideo = () => {
+  const { data: videos, loading, error } = useFetch("/get-popular-video");
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const offers = [
-    { id: 1, image: offer },
-    { id: 2, image: offer },
-    { id: 3, image: offer },
-    { id: 4, image: offer },
-  ];
+  // const offers = [
+  //   { id: 1, image: offer },
+  //   { id: 2, image: offer },
+  //   { id: 3, image: offer },
+  //   { id: 4, image: offer },
+  // ];
 
   return (
+
     <>
       <div className="container mx-auto px-4">
-        {/* Header and Arrows */}
+      {/* <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Svle5DEvElM?si=q_4uj5Y62yhBMT4g&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> */}
         <div className="flex justify-between items-center">
-          <Title title="Available Offers" />
+          <Title title="Popular Videos" />
           <div className="flex gap-6">
             <button
               ref={prevRef}
@@ -67,23 +71,23 @@ const PopularVideo = () => {
           }}
           className="mt-8"
         >
-          {offers.map((offer) => (
-            <SwiperSlide key={offer.id}>
+          {videos?.data?.map((video) => (
+            <SwiperSlide key={video.id}>
               <div className="">
                 <HeroVideoDialog
                   className="block dark:hidden"
                   animationStyle="from-center"
-                  videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                  thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
+                  videoSrc={video.youtube_link}
+                  thumbnailSrc={video.thumbnail}
                   thumbnailAlt="Hero Video"
                 />
-                <HeroVideoDialog
+                {/* <HeroVideoDialog
                   className="hidden dark:block"
                   animationStyle="from-center"
                   videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
                   thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
                   thumbnailAlt="Hero Video"
-                />
+                /> */}
               </div>
             </SwiperSlide>
           ))}
@@ -91,9 +95,9 @@ const PopularVideo = () => {
 
         {/* View All */}
         <div className="flex justify-center items-center mt-5 mb-[26px]">
-          <h1 className="text-[16px] md:text-[20px] font-medium text-heading font-kaiseiHarunoUmi cursor-pointer hover:underline">
+          <Link href="/videos" className="text-[16px] md:text-[20px] font-medium text-heading font-kaiseiHarunoUmi cursor-pointer hover:underline">
             View All
-          </h1>
+          </Link>
         </div>
       </div>
 

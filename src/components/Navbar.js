@@ -11,6 +11,7 @@ import {
   X,
   ChevronDown,
   Globe,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +27,7 @@ import Login from "./login/Login";
 import ModalManager from "./reusable/ModalManager";
 import { useAuth } from "@/context/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { cartUtils } from "@/lib/utils";
 
 // Navigation links data
 const navLinks = [
@@ -52,9 +54,48 @@ const PRIMARY_DARK = "#B8944A";
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("EN");
+  const [cartCount, setCartCount] = useState(0);
   const pathname = usePathname(); // Get current pathname
   const { user, logout } = useAuth();
   console.log(user)
+
+  // Load cart count from localStorage
+  useEffect(() => {
+    const loadCartCount = () => {
+      try {
+        const count = cartUtils.getCartCount();
+        setCartCount(count);
+      } catch (error) {
+        console.error('Error loading cart count:', error);
+        setCartCount(0);
+      }
+    };
+
+    // Load initial cart count
+    loadCartCount();
+
+    // Listen for storage changes (when cart is updated from other components)
+    const handleStorageChange = (e) => {
+      if (e.key === 'cart') {
+        loadCartCount();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Also listen for custom cart update events
+    const handleCartUpdate = () => {
+      loadCartCount();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
+  }, []);
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -88,7 +129,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 font-inter">
+      <header className="sticky top-0 z-100 w-full border-b border-neutral-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 font-inter">
         <div className="container mx-auto flex h-16 md:h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link
@@ -177,28 +218,30 @@ export default function Navbar() {
               >
                 <Search className="h-5 w-5" />
               </Button>
-              <Button
+              <Link href="/wishlist"
                 variant="ghost"
                 size="icon"
                 aria-label="Wishlist"
                 className="hover:opacity-80"
               >
                 <Heart className="h-5 w-5" />
-              </Button>
-              <Button
+              </Link>
+              <Link href="/cart"
                 variant="ghost"
                 size="icon"
                 aria-label="Shopping Cart"
                 className="relative hover:opacity-80"
               >
                 <ShoppingCart className="h-5 w-5" />
-                <span
-                  className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white"
-                  style={{ backgroundColor: PRIMARY_COLOR }}
-                >
-                  3
-                </span>
-              </Button>
+                {cartCount > 0 && (
+                  <span
+                    className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white"
+                    style={{ backgroundColor: PRIMARY_COLOR }}
+                  >
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
             </div>
 
             {/* Login Button */}
@@ -224,6 +267,13 @@ export default function Navbar() {
                   <div className="text-sm font-medium">{user.name}</div>
                   <div className="text-xs text-muted-foreground">{user.email}</div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer" >
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
                   Logout
@@ -258,12 +308,14 @@ export default function Navbar() {
                 }}
               >
                 <ShoppingCart className="h-5 w-5" />
-                <span
-                  className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white"
-                  style={{ backgroundColor: PRIMARY_COLOR }}
-                >
-                  3
-                </span>
+                {cartCount > 0 && (
+                  <span
+                    className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white"
+                    style={{ backgroundColor: PRIMARY_COLOR }}
+                  >
+                    {cartCount}
+                  </span>
+                )}
               </Button>
 
               {/* Mobile Menu Toggle */}

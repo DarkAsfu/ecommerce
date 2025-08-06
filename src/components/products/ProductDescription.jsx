@@ -2,7 +2,8 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const ProductDescription = () => {
+const ProductDescription = ({ description, short_description, additional_description }) => {
+  console.log("description-----------", description, "short_description-----------", short_description, "additional_description-----------", additional_description);
   return (
     <div className="">
       <Tabs defaultValue="description" className="w-full">
@@ -15,16 +16,16 @@ const ProductDescription = () => {
             Description
           </TabsTrigger>
           <TabsTrigger
-            value="review"
+            value="short_description"
             className="data-[state=active]:bg-transparent data-[state=active]:text-primary  data-[state=active]:border-b-primary data-[state=active]:shadow-none text-heading hover:text-gray-900 rounded-none border-b-2 border-transparent pb-3 pt-3 max-w-max text-[26px] font-inter data-[state=active]:font-semibold"
           >
-            Review
+            Short Description
           </TabsTrigger>
           <TabsTrigger
-            value="specifications"
+            value="additional_description"
             className="data-[state=active]:bg-transparent data-[state=active]:text-primary  data-[state=active]:border-b-primary data-[state=active]:shadow-none text-heading hover:text-gray-900 rounded-none border-b-2 border-transparent pb-3 pt-3 max-w-max text-[26px] font-inter data-[state=active]:font-semibold"
           >
-            Specifications
+            Additional Description
           </TabsTrigger>
         </TabsList>
         </div>
@@ -32,121 +33,27 @@ const ProductDescription = () => {
           value="description"
         className="mt-6 text-[20px] font-inter text-heading leading-relaxed space-y-4"
         >
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives. But the structure was from the family the century initial
-            at the made, have spare to negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives. But the structure was from the family the
-          </p>
+          <div dangerouslySetInnerHTML={{
+            __html: description,
+          }}></div>
         </TabsContent>
 
         <TabsContent
-          value="review"
+          value="short_description"
           className="mt-6 text-[20px] font-inter text-heading leading-relaxed space-y-4"
         >
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives. But the structure was from the family the century initial
-            at the made, have spare to negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives. But the structure was from the family the
-          </p>
+          <div dangerouslySetInnerHTML={{
+            __html: short_description,
+          }}></div>
         </TabsContent>
 
         <TabsContent
-          value="specifications"
+          value="additional_description"
           className="mt-6 text-[20px] font-inter text-heading leading-relaxed space-y-4"
         >
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives. But the structure was from the family the century initial
-            at the made, have spare to negatives.
-          </p>
-          <p>
-            We've created a full-stack structure for our working workflow
-            processes, were from the family the century initial at the made,
-            have spare to negatives. But the structure workflow the family the
-            century rather, initial at the made, have spare to negatives. We've
-            created a full-stack structure for our working workflow processes,
-            were from the family the century initial at the made, have spare to
-            negatives.
-          </p>
-         
+          <div dangerouslySetInnerHTML={{
+            __html: additional_description,
+          }}></div>
         </TabsContent>
       </Tabs>
     </div>
